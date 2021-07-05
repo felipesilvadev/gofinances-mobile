@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Alert, Modal, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
@@ -35,7 +35,8 @@ const schema = Yup.object().shape({
   amount: Yup
     .number()
     .typeError('Informe um valor numérico')
-    .positive('O valor não pode ser negativo'),
+    .positive('O valor não pode ser negativo')
+    .required('O valor é obrigatório'),
 });
 
 const dataKey = '@gofinances:transactions';
@@ -119,12 +120,6 @@ export function Register() {
       Alert.alert('Não foi possível salvar, tente novamente');
     }
   }
-
-  // useEffect(() => {
-  //   (async () => {
-  //     return AsyncStorage.removeItem(dataKey);
-  //   })()
-  // }, []);
   
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
