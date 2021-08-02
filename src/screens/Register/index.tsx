@@ -7,6 +7,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
 
+import { useAuth } from '../../hooks/auth';
+
 import { InputForm } from '../../components/Form/InputForm';
 import { TransactionTypeButton } from '../../components/Form/TransactionTypeButton';
 import { CategorySelectButton } from '../../components/Form/CategorySelectButton';
@@ -39,9 +41,8 @@ const schema = Yup.object().shape({
     .required('O valor é obrigatório'),
 });
 
-const dataKey = '@gofinances:transactions';
-
 export function Register() {
+  const { user } = useAuth();
   const { navigate } = useNavigation();
 
   const {
@@ -80,7 +81,7 @@ export function Register() {
       name: 'Categoria',
     });
 
-    navigate('Listagem');
+    navigate({ key:'Listagem' });
   }
 
   async function handleRegister(form: FormData) {
@@ -100,6 +101,8 @@ export function Register() {
       category: category.key,
       date: new Date(),
     };
+
+    const dataKey = `@gofinances:transactions_user:${user.id}`;
 
     try {
       const data = await AsyncStorage.getItem(dataKey);
